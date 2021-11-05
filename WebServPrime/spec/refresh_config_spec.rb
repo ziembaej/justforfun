@@ -7,4 +7,4 @@ describe('#refresh_config?') do
   it("Success") do
     expect(refresh_config?).to(eq(false))
   end
-end 
+end
