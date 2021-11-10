@@ -1,0 +1,5 @@
+
+# Paste line below into command line to update nginx.config
+
+
+mv "~Douments/GitHub/justforfun/WebServPrime/config/nginx.conf" "/opt/homebrew/etc/nginx/nginx.config"

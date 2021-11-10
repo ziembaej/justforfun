@@ -1,6 +1,10 @@
-def refresh_config?(config)
-  def congif?
-    File.path("")
-  end
-  mv "config/config.html" "config"
+## Single Command to update WebServPrime nginx.config
+
+file = "~config/nginx.conf"
+new = "/opt/homebrew/etc/nginx/nginx.config"
+
+def refresh_config
+  mv `file` `new`
 end
+
+inrb refresh_config
