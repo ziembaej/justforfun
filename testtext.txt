@@ -1,4 +1,8 @@
 Test, creating a text file from the command line.
 
 Now I'm editing this file in a new branch, to learn about merging. 
-...I hope.
+...I failed.
+
+I was able to merge the last branch, but failed to push it to the repo online to have 2 active branches running.
+
+Trying again?  Success/FAIL
