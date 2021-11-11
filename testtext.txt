@@ -1,1 +1,4 @@
 Test, creating a text file from the command line.
+
+Now I'm editing this file in a new branch, to learn about merging. 
+...I hope.
