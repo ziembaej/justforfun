@@ -7,11 +7,16 @@ library(rlist)
 path <- "/Users/eric.ziemba/Downloads/"
 setwd(path)
 
+<<<<<<< HEAD
 # accessing all the sheets in two files
 sheets1 = excel_sheets("Wego Bill Verification Vol. IV.xlsx")
 sheets2 = excel_sheets("Wego Bill Verification Vol. III.xlsx")
 sheets = list.append(sheets1, sheets2)
 
+=======
+# accessing all the sheets
+sheets = excel_sheets("Wego Bill Verification Vol. IV.xlsx")
+>>>>>>> 6adcfbc0235b9cff4f16cc14c48200c976e87cab
 d <- list()
 for(i in sheets){
   a = read_excel("Wego Bill Verification Vol. IV.xlsx", sheet=i, col_names = TRUE,
