@@ -1,4 +1,11 @@
 Test, creating a text file from the command line.
 
 Now I'm editing this file in a new branch, to learn about merging. 
-...I hope.
+...I failed.
+
+I was able to merge the last branch, but failed to push it to the repo online to have 2 active branches running.
+
+Trying again?  Success!!
+
+All I had to do was specify `origin <branch>` as part of the `git push` command! Now I can see a new branch online with a button to "Compare & pull request"!!!!!
+
