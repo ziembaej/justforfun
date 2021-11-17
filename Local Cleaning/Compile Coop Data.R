@@ -3,6 +3,7 @@ library(openxlsx)
 library(readxl)
 library(tidyverse)
 library(rlist)
+<<<<<<< HEAD
 # path = "/Users/eric.ziemba/Downloads/Wego Bill Verification Vol. III.xlsx"
 # listsheets = list(excel_sheets(path))
 #
@@ -21,6 +22,10 @@ library(rlist)
 
 path <- "/Users/eric.ziemba/Downloads/"
 # set the working directory
+=======
+# set the working directory
+path <- "/Users/eric.ziemba/Downloads/"
+>>>>>>> 6adcfbc (cleaned up notes for coop data cleaning)
 setwd(path)
 
 # accessing all the sheets
