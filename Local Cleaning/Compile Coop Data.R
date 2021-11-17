@@ -3,48 +3,13 @@ library(openxlsx)
 library(readxl)
 library(tidyverse)
 library(rlist)
-<<<<<<< HEAD
-<<<<<<< HEAD
-# path = "/Users/eric.ziemba/Downloads/Wego Bill Verification Vol. III.xlsx"
-# listsheets = list(excel_sheets(path))
-#
-# dt = read_excel(path, sheet = "Instructions")
-#
-# df = data.frame()
-# setDT(df)
-# df[, `:=`(Link = "",
-#           Invoice_Date = as.Date(1),
-#           Created_at = as.Date(1),
-#           Amount_Due = as.numeric(1),
-#           "# Lines" = as.numeric(0),
-#           Balance_Forward = as.character(x),
-#           Negative_Line_Item	Summary	ECM	Importer	Need to Check	Checked	Reason for Edit	If BF Removed, Why?
-#             Notes = as.character(a)]
 
 path <- "/Users/eric.ziemba/Downloads/"
 # set the working directory
-=======
-# set the working directory
-path <- "/Users/eric.ziemba/Downloads/"
->>>>>>> 6adcfbc (cleaned up notes for coop data cleaning)
 setwd(path)
 
-=======
-# set the working directory
-path <- "/Users/eric.ziemba/Downloads/"
-setwd(path)
-
-<<<<<<< HEAD
-# accessing all the sheets in two files
-sheets1 = excel_sheets("Wego Bill Verification Vol. IV.xlsx")
-sheets2 = excel_sheets("Wego Bill Verification Vol. III.xlsx")
-sheets = list.append(sheets1, sheets2)
-
-=======
->>>>>>> branch2
 # accessing all the sheets
 sheets = excel_sheets("Wego Bill Verification Vol. IV.xlsx")
->>>>>>> 6adcfbc0235b9cff4f16cc14c48200c976e87cab
 d <- list()
 for(i in sheets){
   a = read_excel("Wego Bill Verification Vol. IV.xlsx", sheet=i, col_names = TRUE,
