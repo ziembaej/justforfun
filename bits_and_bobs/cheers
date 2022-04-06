@@ -1,0 +1,9 @@
+
+
+engineers = %w( Brian Joe Joel )
+
+def cheers do |engineers|
+  puts "Cheers #{engineers} "
+end
+
+cheers

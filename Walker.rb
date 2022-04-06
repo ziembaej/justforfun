@@ -33,7 +33,7 @@ class Game
       end
     end
   end
-  
+
   def end_game
     puts "Play Again??"
     response = gets.chomp.to_s
@@ -48,9 +48,11 @@ class Game
   end
 end
 
+dsfkjdsf
+
+
 
 Game.new
 
 Game.step(5)
 
-  
