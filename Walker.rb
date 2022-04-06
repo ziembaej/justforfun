@@ -7,7 +7,7 @@ class Game
   Enter the number of steps you'd like to take.
   Be careful not to wander too far though..."
 
-  def initialize
+  def initializer
     @steps_taken = 0
     @max_steps = rand 10..MAX_STEPS
     start_game
@@ -48,11 +48,8 @@ class Game
   end
 end
 
-dsfkjdsf
-
-
 
 Game.new
 
-Game.step(5)
+Game.step()
 
