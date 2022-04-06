@@ -1,7 +1,7 @@
 class Game
   attr_accessor :steps_taken
 
-  MAX_STEPS = rand 10..1000
+  MAX_STEPS = 1000
 
   puts "Welcome to the walking game.
   Enter the number of steps you'd like to take.
@@ -9,6 +9,7 @@ class Game
 
   def initialize
     @steps_taken = 0
+    @max_steps = rand 10..MAX_STEPS
     start_game
   end
 
@@ -22,11 +23,12 @@ class Game
       puts "You have traveled #{@steps_taken} steps."
       steps_to_take = gets.to_i
       @steps_taken += steps_to_take
-      if @steps_taken == MAX_STEPS
+      if @steps_taken == @max_steps
         puts 'You Have Traveled the Correct Distance!!! :-)'
         end_game
-      elsif @steps_taken > MAX_STEPS
+      elsif @steps_taken > @max_steps
         puts 'Fool!! You have walked off the edge of the Earth and perished in the abyss of space.'
+        puts @max_steps
         end_game
       end
     end
@@ -38,6 +40,7 @@ class Game
     if response == 'Yes'
       puts "Challenge Accepted!"
       @steps_taken = 0
+      @max_steps = rand 10..MAX_STEPS
     else
       puts "Quitter"
       quit
