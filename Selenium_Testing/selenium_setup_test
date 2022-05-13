@@ -1,0 +1,8 @@
+# These are notes
+# pressing enter makes more notes
+# if you want to start writing code
+# hit backspace first to exit the note
+
+def print
+  print("blah blah blah")
+end
