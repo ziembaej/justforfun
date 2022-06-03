@@ -156,7 +156,7 @@ class Galaxy ##The full map
   
   def locate(entity)
     puts "#{@entity} is currently in Zone #{@y_coord}:#{@y_coord}. 
-    This is #{zone.@federation} space, the risk of contact is #{zone.@risk}"
+    This is #{Zone.@federation} space, the risk of contact is #{Zone.@risk}"
   end
 end
 
@@ -212,7 +212,8 @@ class Game
   
     start_game
   end
-  
+end
+
   
   
   
