@@ -1,0 +1,23 @@
+## Analyse case descriptions from .csv
+
+library(data.table)
+library(tidyverse)
+library(rlist)
+library(lubridate)
+library(dplyr)
+library(tidyr)
+library(googlesheets4)
+
+#sheet <- read_sheet("https://docs.google.com/spreadsheets/d/1BOmiDEFNnxzbPVD7QlqEAWZuDHBlLplsRd8UYtWSi2o/edit?usp=sharing")
+# set the working directory
+setwd("/Users/eric.ziemba/Documents/Local Analyses")
+raw <- read.csv("/Users/eric.ziemba/Downloads/report1654287081627.csv")
+setDT(raw)
+
+raw <- raw[, .(Case.Number, Description)]
+# View(raw)
+
+string <- as.vector(raw[,Description])
+how <- "How[\\w\\n*]+[\\w][?]"
+regmatches(string, gregexpr(how, string))
+
