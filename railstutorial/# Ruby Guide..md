@@ -1,5 +1,6 @@
 # Ruby Guide
 
+Working through this guide from [rubyonrails.org](https://guides.rubyonrails.org/autoloading_and_reloading_constants.html)
 
 
 ## Setup of a blog
@@ -79,7 +80,7 @@ create      test/models/article_test.rb
 create      test/fixtures/articles.yml
 ```
 
-## Database Migrations
+### Database Migrations
 
 Migrations are used to alter the structure of an application's database. In Rails applications, migrations are written in Ruby so that they can be database-agnostic.
 
@@ -105,7 +106,7 @@ Note that `title` and `body`were added by the generator because we included them
 `t.timestamps` is also atuomatically included and defines two additional columns named `created_at` and `updated_at`.
 
 
-## Using a Model to Interact with the Database
+### Using a Model to Interact with the Database
 
 To play with our model a bit, we're going to use a feature of Rails called the console. The console is an interactive coding environment just like `irb`, but it also automatically loads Rails and our application code.
 
@@ -117,13 +118,13 @@ bin/rails console
 
 At this prompt, we can initialize a new Article object:
 
-```irb
+```ruby
  article = Article.new(title: "Hello Rails", body: "I am on Rails!")
 ```
 
 It's important to note that we have only initialized this object. This object is not saved to the database at all. It's only available in the console at the moment. To save the object to the database, we must call save:
 
-```irb
+```ruby
 article.save
 ```
 
@@ -131,17 +132,17 @@ The output of this should show INSERT INTO "articles" ... database query. This i
 
 When we want to fetch this article from the database, we can call find on the model and pass the id as an argument:
 
-```irb
+```ruby
 Article.find(1)
 ```
 
 And when we want to fetch all articles from the database, we can call all on the model:
 
-```irb
+```ruby
 Article.all
 ```
 
-## Show a list of articles via th controller
+### Show a list of articles via th controller
 
 Go to our controller in app/controllers/articles_controller.rb, and change the index action to fetch all articles from the database:
 
@@ -155,7 +156,7 @@ end
 
 Controller instance variables can be accessed by the view. That means we can reference @articles in app/views/articles/index.html.erb. Let's open that file, and replace its contents with:
 
-```ruby
+```html
 <h1>Articles</h1>
 
 <ul>
@@ -224,7 +225,7 @@ The show action calls `Article.find` (mentioned previously) with the ID captured
 
 Create a new file `app/views/articles/show.html.erb`, with the following contents:
 
-```erb
+```html
 <h1><%= @article.title %></h1>
 
 <p><%= @article.body %></p>
@@ -232,7 +233,7 @@ Create a new file `app/views/articles/show.html.erb`, with the following content
 
 Then we can change up the index view to add links to the articles:
 
-```erb
+```html
 <h1>Articles</h1>
 
 <ul>
@@ -248,7 +249,7 @@ Then we can change up the index view to add links to the articles:
 
 `<a ...>` creates the link using `href`, we still need to use article.title in the ERB tag to display the correct link text.
 
-## Resourceful Routing
+### Resourceful Routing
 
 So far, we've covered the "R" (Read) of CRUD. We will eventually cover the "C" (Create), "U" (Update), and "D" (Delete). As you might have guessed, we will do so by adding new **routes, controller actions, and views**. Whenever we have such a combination of routes, controller actions, and views that work together to perform CRUD operations on an entity, we call that entity a **resource**. For example, in our application, we would say an article is a resource.
 
@@ -271,7 +272,7 @@ We can inspect what routes are mapped by running the `bin/rails routes` command.
 
 The `resources` method also sets up URL and path helper methods that we can use to keep our code from depending on a specific route configuration. The values in the "Prefix" column above plus a suffix of `_url` or `_path` form the names of these helpers. For example, the `article_path`helper returns `"/articles/#{article.id}"` when given an article. We can use it to tidy up our links in `app/views/articles/index.html.erb`:
 
-```erb
+```html
 <h1>Articles</h1>
 
 <ul>
@@ -287,7 +288,7 @@ The `resources` method also sets up URL and path helper methods that we can use 
 
 However, we will take this one step further by using the `link_to` helper. The `link_to` helper renders a link with its first argument as the link's text and its second argument as the link's destination. If we pass a model object as the second argument, `link_to` will call the appropriate path helper to convert the object to a path. For example, if we pass an article, `link_to` will call `article_path`. So `app/views/articles/index.html.erb` becomes:
 
-```erb
+```html
 <h1>Articles</h1>
 
 <ul>
@@ -300,7 +301,7 @@ However, we will take this one step further by using the `link_to` helper. The `
 ```
 
 
-## Creating a New Article
+### Creating a New Article
 
 Now we move on to the "C" (Create) of CRUD. Typically, in web applications, creating a new resource is a multi-step process. First, the user requests a form to fill out. Then, the user submits the form. If there are no errors, then the resource is created and some kind of confirmation is displayed. Else, the form is redisplayed with error messages, and the process is repeated.
 
@@ -334,7 +335,7 @@ We will use a feature of Rails called a form builder to create our form. Using a
 
 Let's create app/views/articles/new.html.erb with the following contents:
 
-```erb
+```html
 <h1>New Article</h1>
 
 <%= form_with model: @article do |form| %>
@@ -358,7 +359,7 @@ The `form_with` helper method instantiates a form builder. In the `form_with` bl
 
 The resulting output from our `form_with` call will look like:
 
-```erb
+```html
 
 <form action="/articles" accept-charset="UTF-8" method="post">
   <input type="hidden" name="authenticity_token" value="...">
@@ -434,7 +435,7 @@ The second validation declares that a `body` value must also be present. Additio
 
 With our validations in place, let's modify `app/views/articles/new.html.erb` to display any error messages for `title` and `body`:
 
-```erb
+```html
 <h1>New Article</h1>
 
 <%= form_with model: @article do |form| %>
@@ -493,7 +494,7 @@ Check this!
 
 At the point I went back to `index.html.erb` to add a sub header above the current articles, and a link to create new ones!
 
-```erb
+```html
 <h3>Actions</h3>
 <p>
     <a href= "/articles/new">
@@ -503,7 +504,7 @@ At the point I went back to `index.html.erb` to add a sub header above the curre
 
 But I forgot to read the last paragraph of the section and there's a beter way using `link_to` ...
 
-```erb
+```html
 <h1>Articles</h1>
 
 <ul>
@@ -550,4 +551,444 @@ Our `edit` form will look the same as our `new` form. Even the code will be the 
 
 **The above code is the same as our form in `app/views/articles/new.html.erb`, except that all occurrences of `@article` have been replaced with `article`. Because partials are shared code, it is best practice that they do not depend on specific instance variables set by a controller action. Instead, we will pass the article to the partial as a local variable.**
 
+
+Let's update app/views/articles/new.html.erb to use the partial via render:
+
+```html
+<h1>New Article</h1>
+
+<%= render "form", article: @article %>
+```
+
+*A partial's filename must be prefixed with an underscore, e.g. _form.html.erb. But when rendering, it is referenced without the underscore, e.g. render "form".*
+
+And now, let's create a very similar app/views/articles/edit.html.erb:
+
+```html
+<h1>Edit Article</h1>
+
+<%= render "form", article: @article %>
+```
+
+We can now update an article by visiting its edit page, e.g. <http://localhost:3000/articles/1/edit>. To finish up, let's link to the edit page from the bottom of `app/views/articles/show.html.erb`:
+
+### Delete an Article
+
+Finally, we arrive at the "D" (Delete) of CRUD. Deleting a resource is a simpler process than creating or updating. It only requires a route and a controller action. And our resourceful routing (`resources :articles`) already provides the route, which maps `DELETE /articles/:id` requests to the destroy action of `ArticlesController`.
+
+So, let's add a typical destroy action to `app/controllers/articles_controller.rb`, below the update action:
+
+
+```ruby
+  def destroy
+    @article = Article.find(params[:id])
+    @article.destroy
+
+    redirect_to root_path, status: :see_other
+  end
+```
+
+The `destroy` action fetches the article from the database, and calls [destroy](https://api.rubyonrails.org/v7.0.4/classes/ActiveRecord/Persistence.html#method-i-destroy) on it. Then, it redirects the browser to the root path with status code 303 See Other.
+
+We have chosen to redirect to the root path because that is our main access point for articles. But, in other circumstances, you might choose to redirect to e.g. `articles_path`.
+
+Now let's add a link at the bottom of `app/views/articles/show.html.erb` so that we can delete an article from its own page:
+
+```html
+    <li><%= "Destroy", article_path(@article), data: {
+            turbo_method: :delete,
+            turbo_confirm: "Are you sure?" 
+            } %></li>
+```
+
+In the above code, we use the `data` option to set the `data-turbo-method` and `data-turbo-confirm` HTML attributes of the "Destroy" link. Both of these attributes hook into [Turbo](https://turbo.hotwired.dev/), which is included by default in fresh Rails applications. `data-turbo-method="delete"` will cause the link to make a `DELETE` request instead of a `GET` request. `data-turbo-confirm="Are you sure?"` will cause a confirmation dialog to appear when the link is clicked. If the user cancels the dialog, the request will be aborted.
+
+## Adding a Second Model
+
+It's time to add a second model to the application. The second model will handle comments on articles.
+
+### Generating a Model
+
+We're going to see the same generator that we used before when creating the Article model. This time we'll create a Comment model to hold a reference to an article. Run this command in your terminal:
+
+```raw
+bin/rails generate model Comment commenter:string body:text article:references
+```
+
+This is very similar to the `Article` model that you saw earlier. The difference is the line `belongs_to :article`, which sets up an *Active Record* association. You'll learn a little about associations in the next section of this guide.
+
+The (:references) keyword used in the shell command is a special data type for models. It creates a new column on your database table with the provided model name appended with an `_id` that can hold integer values. To get a better understanding, analyze the `db/schema.rb` file after running the migration.
+
+In addition to the model, Rails has also made a migration to create the corresponding database table in `db/schema.rb`.
+
+The migration file is `db/migrate/TIMESTAMP_create_comments.rb`
+
+The `t.references` line creates an integer column called `article_id`, an index for it, and a foreign key constraint that points to the id column of the `articles` table.
+
+Run the migration using:
+
+```raw
+bin/rails db:migrate
+```
+
+**Rails is smart enough to only execute the migrations that have not already been run against the current database. Essentially the `generate model` line preps the model, and `db:migrate` runs any migration from new models**
+
+
+### Associating Models
+
+Active Record associations let you easily declare the relationship between two models. In the case of `comments` and `articles`, you could write out the relationships this way:
+
+- Each comment belongs to one article.
+- One article can have many comments.
+
+In fact, this is very close to the syntax that Rails uses to declare this association. You've already seen the line of code inside the `Comment` model (`app/models/comment.rb`) that makes each comment belong to an Article. *Note that this association is the same as concept as a many:1 relationship*
+
+
+You'll need to edit `app/models/article.rb` to add the other side of the association by including:
+
+```ruby
+  has_many :comments
+```
+
+These two declarations (Comment `belongs_to :article` and Article `has_many :comments`) enable a good bit of automatic behavior. For example, if you have an instance variable `@article` containing an article, you can retrieve all the comments belonging to that article as an array using `@article.comments`.
+
+### Adding a Route for Comments
+
+As with the `articles` controller, we will need to add a route so that Rails knows where we would like to navigate to see comments. Open up the `config/routes.rb` file again, and edit it as follows:
+
+Update
+
+```ruby
+resources :articles
+```
+
+to become
+
+```ruby
+resources :articles do
+    resources :comments
+end
+```
+
+This creates `comments` as a nested resource within `articles`. This is another part of capturing the **hierarchical relationship that exists between articles and comments.**
+
+
+### Generating a Controller
+
+With the model in hand, you can turn your attention to creating a matching controller. Again, we'll use the same generator we used before:
+
+```raw
+bin/rails generate controller Comments
+```
+
+Like with any blog, our readers will create their comments directly after reading the article, and once they have added their comment, will be sent back to the article show page to see their comment now listed. Due to this, our `CommentsController` is there to provide a method to create comments and delete spam comments when they arrive.
+
+So first, we'll wire up the Article show template (app/views/articles/show.html.erb) to let us make a new comment add the following:
+
+```html
+<h2>Add a comment:</h2>
+<%= form_with model: [ @article, @article.comments.build ] do |form| %>
+  <p>
+    <%= form.label :commenter %><br>
+    <%= form.text_field :commenter %>
+  </p>
+  <p>
+    <%= form.label :body %><br>
+    <%= form.text_area :body %>
+  </p>
+  <p>
+    <%= form.submit %>
+  </p>
+  <% end %>
+  ```
+
+This adds a form on the `Article` show page that creates a new comment by calling the `CommentsController` `create` action. The `form_with` call here uses an array, which will build a nested route, such as `/articles/1/comments`.
+
+Let's wire up the create in `app/controllers/comments_controller.rb`:
+
+```ruby
+class CommentsController < ApplicationController
+  def create
+    @article = Article.find(params[:article_id])
+    @comment = @article.comments.create(comment_params)
+    redirect_to article_path(@article)
+  end
+
+  private
+    def comment_params
+      params.require(:comment).permit(:commenter, :body)
+    end
+end
+```
+
+- **Why does the show page use comments.build, when we're creating comments.create here????**
+
+You'll see a bit more complexity here than you did in the controller for articles. That's a side-effect of the nesting that you've set up. Each request for a comment has to keep track of the article to which the comment is attached, thus the initial call to the `find` method of the `Article` model to get the article in question.
+
+In addition, the code takes advantage of some of the methods available for an association. We use the `create` method on `@article.comments` to create and save the comment. This will automatically link the comment so that it belongs to that particular article.
+
+Once we have made the new comment, we send the user back to the original article using the `article_path`(`@article`) helper. As we have already seen, this calls the show action of the `ArticlesController` which in turn renders the `show.html.erb` template. This is where we want the comment to show, so let's add that to the `app/views/articles/show.html.erb`.
+
+```html
+<h2>Comments</h2>
+<% @article.comments.each do |comment| %>
+  <p>
+    <strong>Commenter:</strong>
+    <%= comment.commenter %>
+  </p>
+
+  <p>
+    <strong>Comment:</strong>
+    <%= comment.body %>
+  </p>
+<% end %>
+```
+
+---
+
+**When testing this I found that I cannot destroy and article that has comments. I will need to update that later, but might happen as part of the tutorial anyways.**
+
+---
+
+## Refactoring
+
+### Rendering Partial Collections
+
+First, we will make a comment partial to extract showing all the comments for the article. Create the file `app/views/comments/_comment.html.erb` and put the following into it:
+
+```html
+<p>
+  <strong>Commenter:</strong>
+  <%= comment.commenter %>
+</p>
+
+<p>
+  <strong>Comment:</strong>
+  <%= comment.body %>
+</p>
+```
+
+Then you can change `app/views/articles/show.html.erb` to show the following for the Comments block
+
+```html
+<h2>Comments</h2>
+<%= render @article.comments %>
+```
+
+This will now render the partial in `app/views/comments/_comment.html.erb` once for each comment that is in the `@article.comments` collection. As the `render` method iterates over the `@article.comments` collection, it assigns each comment to a local variable named the same as the partial, in this case comment, which is then available in the partial for us to show.
+
+### Rendering a Partial Form
+
+Let us also move that new comment section out to its own partial. Again, you create a file `app/views/comments/_form.html.erb` containing:
+
+```html
+<%= form_with model: [ @article, @article.comments.build ] do |form| %>
+  <p>
+    <%= form.label :commenter %><br>
+    <%= form.text_field :commenter %>
+  </p>
+  <p>
+    <%= form.label :body %><br>
+    <%= form.text_area :body %>
+  </p>
+  <p>
+    <%= form.submit %>
+  </p>
+<% end %>
+```
+
+Then you make the `app/views/articles/show.html.erb` look like the following:
+
+```html
+<h1><%= @article.title %></h1>
+
+<p><%= @article.body %></p>
+
+<ul>
+  <li><%= link_to "Edit", edit_article_path(@article) %></li>
+  <li><%= link_to "Destroy", article_path(@article), data: {
+                    turbo_method: :delete,
+                    turbo_confirm: "Are you sure?"
+                  } %></li>
+</ul>
+
+<h2>Comments</h2>
+<%= render @article.comments %>
+
+<h2>Add a comment:</h2>
+<%= render 'comments/form' %>
+```
+
+The second `render` just defines the partial template we want to render, `comments/form`. Rails is smart enough to spot the forward slash in that string and realize that you want to render the `_form.html.erb` file in the `app/views/comments` directory.
+
+The `@article` object is available to any partials rendered in the view because we defined it as an instance variable.
+
+- WHY can `_comment.html.erb` be called as part of `@article` where the `_form.html.erb` cannot? I tried renaming it and that didn't work, so it's not just because there is another file called `_form.html.erb` ...
+
+### Using Concerns
+
+Concerns are a way to make large controllers or models easier to understand and manage. This also has the advantage of reusability when multiple models (or controllers) share the same concerns. *Concerns* are implemented using *modules* that contain *methods* representing a well-defined slice of the functionality that a model or controller is responsible for. In other languages, modules are often known as mixins.
+
+You can use concerns in your controller or model the same way you would use any module. When you first created your app with `rails new blog`, two folders were created within app/ along with the rest:
+
+```raw
+app/controllers/concerns
+app/models/concerns
+```
+
+In the example below, we will implement a new feature for our blog that would benefit from using a concern. Then, we will create a concern, and refactor the code to use it, making the code more DRY and maintainable.
+
+A blog article might have various statuses - for instance, it might be visible to everyone (i.e. `public`), or only visible to the author (i.e. `private`). It may also be hidden to all but still retrievable (i.e. `archived`). Comments may similarly be hidden or visible. This could be represented using a `status` column in each model.
+
+#### First, let's run the following migrations to add status to Articles and Comments:
+
+```raw
+bin/rails generate migration AddStatusToArticles status:string
+bin/rails generate migration AddStatusToComments status:string
+```
+
+And next, let's update the database with the generated migrations:
+
+```raw
+bin/rails db:migrate
+```
+
+We need to add `:status` to the parameters for both controllers for `Articles` and `Comments`
+
+i.e.
+
+```ruby
+  private
+    def article_params
+      params.require(:article).permit(:title, :body, :status)
+    end
+```
+
+AND:
+
+```ruby
+  private
+    def article_params
+      params.require(:article).permit(:title, :body, :status)
+    end
+
+```
+
+Next we need to add statuses to each model, `article.rb` and `comment.rb`:
+
+```ruby
+class Article < ApplicationRecord
+  has_many :comments
+
+  validates :title, presence: true
+  validates :body, presence: true, length: { minimum: 10 }
+
+  VALID_STATUSES = ['public', 'private', 'archived']
+
+  validates :status, inclusion: { in: VALID_STATUSES }
+
+  def archived?
+    status == 'archived'
+  end
+end
+```
+
+AND:
+
+```ruby
+class Comment < ApplicationRecord
+  belongs_to :article
+
+  VALID_STATUSES = ['public', 'private', 'archived']
+
+  validates :status, inclusion: { in: VALID_STATUSES }
+
+  def archived?
+    status == 'archived'
+  end
+end
+```
+
+Then, in our index action template (`app/views/articles/index.html.erb`) we would use the `archived?` method to avoid displaying any article that is archived:
+
+```html
+...
+
+  <% @articles.each do |article| %>
+    <% unless article.archived? %>
+      <li>
+        <%= link_to article.title, article %>
+      </li>
+    <% end %>
+...
+
+```
+
+
+Similarly, in our comment partial view (`app/views/comments/_comment.html.erb`) we would use the `archived?` method to avoid displaying any comment that is archived. Wrap this around the current comment partial view:
+
+```html
+<% unless comment.archived? %>
+
+...
+
+<% end %>
+```
+
+However, if you look again at our models now, you can see that the logic is duplicated. If in the future we increase the functionality of our blog - to include private messages, for instance - we might find ourselves duplicating the logic yet again. This is where concerns come in handy.
+
+
+### Improve the idea of archiving by building a model for visibility
+
+
+A concern is only responsible for a focused subset of the model's responsibility; the methods in our concern will all be related to the visibility of a model. Let's call our new concern (module) `Visible`. We can create a new file inside `app/models/concerns` called `visible.rb` , and store all of the status methods that were duplicated in the models.
+
+app/models/concerns/visible.rb
+
+```ruby
+module Visible
+  def archived?
+    status == 'archived'
+  end
+end
+```
+
+We can add our status validation to the concern, but this is slightly more complex as validations are methods called at the class level. The `ActiveSupport::Concern` ([API Guide](https://api.rubyonrails.org/v7.0.4/classes/ActiveSupport/Concern.html)) gives us a simpler way to include them:
+
+
+Now, we can remove the duplicated logic from each model and instead include our new Visible module:
+
+```ruby
+include Visible
+```
+
+Class methods can also be added to concerns. If we want to display a count of public articles or comments on our main page, we might add a class method to Visible as follows:
+
+```ruby
+  class_methods do
+    def public_count
+      where(status: 'public').count
+    end
+  end
+```
+
+Then in the view, you can call it like any class method:
+
+```html
+<h1>Articles</h1>
+
+Our blog has <%= Article.public_count %> articles and counting!
+
+<ul>
+  <% @articles.each do |article| %>
+    <% unless article.archived? %>
+      <li>
+        <%= link_to article.title, article %>
+      </li>
+    <% end %>
+  <% end %>
+</ul>
+
+<%= link_to "New Article", new_article_path %>
+```
 
