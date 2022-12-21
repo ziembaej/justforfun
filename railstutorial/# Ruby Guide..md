@@ -1,6 +1,8 @@
 # Ruby Guide
 
-Working through this guide from [rubyonrails.org](https://guides.rubyonrails.org/autoloading_and_reloading_constants.html)
+Working through this guide from [rubyonrails.org](https://guides.rubyonrails.org/getting_started.html)
+
+[constants](https://guides.rubyonrails.org/autoloading_and_reloading_constants.html)
 
 
 ## Setup of a blog
@@ -868,8 +870,8 @@ AND:
 
 ```ruby
   private
-    def article_params
-      params.require(:article).permit(:title, :body, :status)
+    def comment_params
+      params.require(:comment).permit(:commenter, :body, :status)
     end
 
 ```
@@ -992,3 +994,171 @@ Our blog has <%= Article.public_count %> articles and counting!
 <%= link_to "New Article", new_article_path %>
 ```
 
+To finish up, we will add a select box to the forms, and let the user select the status when they create a new article or post a new comment. We can also specify the default status as public. In `app/views/articles/_form.html.erb`, we can add:
+
+
+```html
+<div>
+  <%= form.label :status %><br>
+  <%= form.select :status, ['public', 'private', 'archived'], selected: 'public' %>
+</div>
+```
+
+and in `app/views/comments/_form.html.erb`:
+
+```html
+<p>
+  <%= form.label :status %><br>
+  <%= form.select :status, ['public', 'private', 'archived'], selected: 'public' %>
+</p>
+
+```
+
+---
+
+## Deleting Comments
+
+Another important feature of a blog is being able to delete spam comments. To do this, we need to implement a link of some sort in the view and a destroy action in the `CommentsController`.
+
+So first, let's add the delete link in the `app/views/comments/_comment.html.erb` partial:
+
+```html
+<% unless comment.archived? %>
+  <p>
+    <strong>Commenter:</strong>
+    <%= comment.commenter %>
+  </p>
+
+  <p>
+    <strong>Comment:</strong>
+    <%= comment.body %>
+  </p>
+
+  <p>
+    <%= link_to "Destroy Comment", [comment.article, comment], data: {
+                  turbo_method: :delete,
+                  turbo_confirm: "Are you sure?"
+                } %>
+  </p>
+<% end %>
+```
+
+Clicking this new "Destroy Comment" link will fire off a `DELETE` `/articles/:article_id/comments/:id` to our `CommentsController`, which can then use this to find the comment we want to delete, so let's add a destroy action to our controller (`app/controllers/comments_controller.rb`):
+
+```ruby
+class CommentsController < ApplicationController
+  def create
+    @article = Article.find(params[:article_id])
+    @comment = @article.comments.create(comment_params)
+    redirect_to article_path(@article)
+  end
+
+  def destroy
+    @article = Article.find(params[:article_id])
+    @comment = @article.comments.find(params[:id])
+    @comment.destroy
+    redirect_to article_path(@article), status: :see_other
+  end
+
+  private
+    def comment_params
+      params.require(:comment).permit(:commenter, :body, :status)
+    end
+end
+
+```
+
+
+The `destroy` action will find the article we are looking at, locate the comment within the `@article.comments` collection, and then remove it from the database and send us back to the show action for the article.
+
+### Deleting Associated Objects
+
+If you delete an article, its associated comments will also need to be deleted, otherwise they would simply occupy space in the database. Rails allows you to use the `dependent` option of an association to achieve this. Modify the Article model, `app/models/article.rb`, as follows:
+
+```ruby
+class Article < ApplicationRecord
+  include Visible
+
+  has_many :comments, dependent: :destroy
+
+  validates :title, presence: true
+  validates :body, presence: true, length: { minimum: 10 }
+end
+```
+
+## Security - Basic Authorization
+
+If you were to publish your blog online, anyone would be able to add, edit and delete articles or delete comments.
+
+**Rails provides an HTTP authentication system that will work nicely in this situation.**
+
+In the `ArticlesController` we need to have a way to block access to the various actions if the person is not authenticated. Here we can use the Rails `http_basic_authenticate_with` method, which allows access to the requested action if that method allows it.
+
+To use the authentication system, we specify it at the top of our `ArticlesController` in `app/controllers/articles_controller.rb`. In our case, we want the user to be authenticated on every action except index and show, so we write that:
+
+```ruby
+class ArticlesController < ApplicationController
+
+  http_basic_authenticate_with name: "dhh", password: "secret", except: [:index, :show]
+
+  def index
+    @articles = Article.all
+  end
+
+```
+
+We also want to allow only authenticated users to delete comments, so in the `CommentsController` (`app/controllers/comments_controller.rb`) we write:
+
+```ruby
+class CommentsController < ApplicationController
+
+  http_basic_authenticate_with name: "dhh", password: "secret", only: :destroy
+
+  def create
+    @article = Article.find(params[:article_id])
+    # ...
+  end
+
+```
+
+Now if you try to create a new article, you will be greeted with a basic HTTP Authentication challenge. After entering the correct username and password, you will remain authenticated until a different username and password is required or the browser is closed.
+
+Other authentication methods are available for Rails applications. Two popular authentication add-ons for Rails are the [Devise](https://github.com/plataformatec/devise) rails engine and the [Authlogic](https://github.com/binarylogic/authlogic) gem, along with a number of others.
+
+**Security, especially in web applications, is a broad and detailed area. Security in your Rails application is covered in more depth in the [Ruby on Rails Security Guide](https://guides.rubyonrails.org/security.html).**
+
+
+---
+
+### My own questions.
+
+- What about navigating back to index from show page?
+
+- Where do I go find archived articles? create a auth locked archive page??
+
+- status dropdown showing on show page 🐛
+
+
+## What's Next????
+
+Now that you've seen your first Rails application, you should feel free to update it and experiment on your own.
+
+Remember, you don't have to do everything without help. As you need assistance getting up and running with Rails, feel free to consult these support resources:
+
+The Ruby on Rails Guides
+The Ruby on Rails mailing list
+
+---
+
+## Configuration Gotchas
+
+The easiest way to work with Rails is to store all external data as UTF-8. If you don't, Ruby libraries and Rails will often be able to convert your native data into UTF-8, but this doesn't always work reliably, so you're better off ensuring that all external data is UTF-8.
+
+If you have made a mistake in this area, the most common symptom is a black diamond with a question mark inside appearing in the browser. Another common symptom is characters like "Ã¼" appearing instead of "ü". Rails takes a number of internal steps to mitigate common causes of these problems that can be automatically detected and corrected. However, if you have external data that is not stored as UTF-8, it can occasionally result in these kinds of issues that cannot be automatically detected by Rails and corrected.
+
+Two very common sources of data that are not UTF-8:
+
+Your text editor: Most text editors (such as TextMate), default to saving files as UTF-8. If your text editor does not, this can result in special characters that you enter in your templates (such as é) to appear as a diamond with a question mark inside in the browser. This also applies to your i18n translation files. Most editors that do not already default to UTF-8 (such as some versions of Dreamweaver) offer a way to change the default to UTF-8. Do so.
+Your database: Rails defaults to converting data from your database into UTF-8 at the boundary. However, if your database is not using UTF-8 internally, it may not be able to store all characters that your users enter. For instance, if your database is using Latin-1 internally, and your user enters a Russian, Hebrew, or Japanese character, the data will be lost forever once it enters the database. If possible, use UTF-8 as the internal storage of your database.
+
+---

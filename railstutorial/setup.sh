@@ -20,7 +20,7 @@ rails --version
 # rails new --help
 
 ## go to the blog dir
-cd blog
+/Users/eric.ziemba/Documents/GitHub/justforfun/railstutorial/blog
 
 ## start a server on localhost
 bin/rails server
