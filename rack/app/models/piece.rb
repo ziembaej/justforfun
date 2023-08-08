@@ -13,4 +13,3 @@ class Piece < ApplicationRecord
         status == 'archived'
     end
 end
-
