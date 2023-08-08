@@ -1,0 +1,19 @@
+<h1>Articles on Rails!</h1>
+
+Our blog has <%= Article.public_count %> articles and counting!
+
+<h3>Current Articles</h3>
+<ul>
+    <% @articles.each do |article| %>
+        <% unless article.archived? %>
+        <li>
+            <%= link_to article.title, article%>
+        </li>
+        <% end %>
+    <% end %>
+</ul>
+
+<h3>Actions</h3>
+<p>
+    <%= link_to "Create a New Article", new_article_path%>
+</p>
