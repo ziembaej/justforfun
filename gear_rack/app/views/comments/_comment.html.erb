@@ -8,7 +8,7 @@
             <%= comment.body %>
     </p>
     <p>
-        <%= link_to "Destoy Comment", [comment.article, comment],
+        <%= link_to "Destoy Comment", [comment.piece, comment],
         data: {
                 turbo_method: :delete,
                 turbo_confirm: "Are you sure?"
