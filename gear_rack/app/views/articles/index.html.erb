@@ -1,13 +1,13 @@
-<h1>Articles on Rails!</h1>
+<h1>Pieces on Rails!</h1>
 
-Our blog has <%= Article.public_count %> articles and counting!
+Our blog has <%= Piece.public_count %> pieces and counting!
 
-<h3>Current Articles</h3>
+<h3>Current Pieces</h3>
 <ul>
-    <% @articles.each do |article| %>
-        <% unless article.archived? %>
+    <% @pieces.each do |piece| %>
+        <% unless piece.archived? %>
         <li>
-            <%= link_to article.title, article%>
+            <%= link_to piece.title, piece%>
         </li>
         <% end %>
     <% end %>
@@ -15,5 +15,5 @@ Our blog has <%= Article.public_count %> articles and counting!
 
 <h3>Actions</h3>
 <p>
-    <%= link_to "Create a New Article", new_article_path%>
+    <%= link_to "Create a New Piece", new_piece_path%>
 </p>

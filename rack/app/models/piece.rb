@@ -1,4 +1,4 @@
-class Article < ApplicationRecord
+class Piece < ApplicationRecord
     include Visible
     has_many :comments, dependent: :destroy
 
@@ -13,4 +13,3 @@ class Article < ApplicationRecord
         status == 'archived'
     end
 end
-

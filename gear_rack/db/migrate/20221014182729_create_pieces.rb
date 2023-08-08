@@ -1,6 +1,6 @@
-class CreateArticles < ActiveRecord::Migration[7.0]
+class CreatePieces < ActiveRecord::Migration[7.0]
   def change
-    create_table :articles do |t|
+    create_table :pieces do |t|
       t.string :title
       t.text :body
 
