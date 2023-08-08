@@ -1,0 +1,19 @@
+<h1><%= @piece.title %></h1>
+
+<p><%= @piece.body %></p>
+
+<ul>
+    <li><%= link_to "Edit", edit_piece_path(@piece) %></li>
+    <li><%= link_to "Destroy", piece_path(@piece), 
+    data: {
+            turbo_method: :delete,
+            turbo_confirm: "Are you sure?" 
+            } %></li>
+</ul>
+
+<h2>Comments</h2>
+<%= render @piece.comments %>
+
+<h2>Add a comment:</h2>
+<%= render 'comments/form' %>
+

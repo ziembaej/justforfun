@@ -1,0 +1,19 @@
+<h1>Pieces on Rails!</h1>
+
+Our blog has <%= Piece.public_count %> pieces and counting!
+
+<h3>Current Pieces</h3>
+<ul>
+    <% @pieces.each do |piece| %>
+        <% unless piece.archived? %>
+        <li>
+            <%= link_to piece.title, piece%>
+        </li>
+        <% end %>
+    <% end %>
+</ul>
+
+<h3>Actions</h3>
+<p>
+    <%= link_to "Create a New Piece", new_piece_path%>
+</p>
