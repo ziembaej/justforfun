@@ -48,7 +48,7 @@ class PiecesController < ApplicationController
 
   private
     def piece_params
-      params.require(:piece).permit(:title, :body, :status)
+      params.require(:piece).permit(:title, :body, :status, :brand, :model, :purchase_date, :purchase_price, :purchase_location, :serial_number, :retired_on)
     end
 
 end

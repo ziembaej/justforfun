@@ -1,16 +1,45 @@
 <%= form_with model: piece do |form| %>
     <div>
-        <%= form.label :title %><br>
+        <%= form.label :title %> <br>
         <%= form.text_field :title %>
         <%= piece.errors.full_messages_for(:title).each do |message| %>
             <div><%= message %></div>
         <% end %>
     </div>
 
+  <div>
+    <%= form.label :brand %><br>
+    <%= form.select :brand, ['Black Diamond', 'CAMP', 'DMM', 'Edelrid', 'Grivel', 'Mad Rock', 'Metolius', 'Petzl', 'Trango', 'Wild Country'],
+    selected: 'Black Diamond' %>
   </div>
 
   <div>
-    <%= form.label :body %><br>
+    <%= form.label :model %><br>
+    <%= form.text_field :model %>
+  </div>
+
+  <div>
+    <%= form.label :serial_number %><br>
+    <%= form.text_field :serial_number %>
+  </div>
+  
+  <div>
+    <%= form.label :purchase_date %><br>
+    <%= form.date_field :purchase_date %>
+  </div>
+   
+  <div>
+    <%= form.label "Purchased At" %><br>
+    <%= form.text_field :purchase_location %>
+  </div>
+
+  <div>
+    <%= form.label "Retired" %><br>
+    <%= form.date_field :retired_on %>
+  </div>
+
+  <div>
+    <%= form.label "Notes" %><br>
     <%= form.text_area :body %><br>
     <% piece.errors.full_messages_for(:body).each do |message| %>
       <div><%= message %></div>
